@@ -29,16 +29,16 @@ public class ReplaceWithPrefabWindow : EditorWindow
             }
             if (unityObject != null)
             {
-                Debug.LogFormat(
-                    property.serializedObject.targetObject,
-                    "Replace property {0} component type {1} reference to object {2} with reference to object {3}",
-                    property.propertyPath,
-                    type.ToString(),
-                    property.objectReferenceValue.name,
-                    unityObject.name);
-                //property.serializedObject.UpdateIfRequiredOrScript();
-                //property.objectReferenceValue = unityObject;
-                //property.serializedObject.ApplyModifiedProperties();
+                // Debug.LogFormat(
+                //     property.serializedObject.targetObject,
+                //     "Replace property {0} component type {1} reference to object {2} with reference to object {3}",
+                //     property.propertyPath,
+                //     type.ToString(),
+                //     property.objectReferenceValue.name,
+                //     unityObject.name);
+                property.serializedObject.UpdateIfRequiredOrScript();
+                property.objectReferenceValue = unityObject;
+                property.serializedObject.ApplyModifiedProperties();
             }
         }
     }
@@ -172,7 +172,7 @@ public class ReplaceWithPrefabWindow : EditorWindow
                         SerializedProperty property = serializedObject.GetIterator();
                         do
                         {
-                            if (property.propertyType == SerializedPropertyType.ObjectReference && property.objectReferenceValue != null)
+                            if (property.name != "m_GameObject" && property.propertyType == SerializedPropertyType.ObjectReference && property.objectReferenceValue != null)
                             {
                                 Type type = property.objectReferenceValue.GetType();
                                 int reference = property.objectReferenceValue.GetInstanceID();
