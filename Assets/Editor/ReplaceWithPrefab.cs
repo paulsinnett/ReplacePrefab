@@ -23,12 +23,6 @@ public class ReplaceWithPrefabWindow : EditorWindow
         {
             UnityEngine.Object unityObject = gameObject;
             Type type = property.objectReferenceValue.GetType();
-            Debug.LogFormat(
-                property.serializedObject.targetObject,
-                "Replace component {0} reference to object {1} with reference to object {2}",
-                type.ToString(),
-                property.objectReferenceValue.name,
-                unityObject.name);
             if (type != typeof(GameObject))
             {
                 unityObject = gameObject.GetComponent(type);
@@ -37,7 +31,8 @@ public class ReplaceWithPrefabWindow : EditorWindow
             {
                 Debug.LogFormat(
                     property.serializedObject.targetObject,
-                    "Replace component {0} reference to object {1} with reference to object {2}",
+                    "Replace property {0} component type {1} reference to object {2} with reference to object {3}",
+                    property.propertyPath,
                     type.ToString(),
                     property.objectReferenceValue.name,
                     unityObject.name);
@@ -171,7 +166,7 @@ public class ReplaceWithPrefabWindow : EditorWindow
             {
                 foreach (var component in sceneObject.GetComponentsInChildren(typeof(Component), true))
                 {
-                    if (!selectedObjectsLookup.ContainsKey(component.gameObject.GetInstanceID()) && !component.GetType().IsSubclassOf(typeof(Transform)) && component.GetType() != typeof(Transform))
+                    if (!component.GetType().IsSubclassOf(typeof(Transform)) && component.GetType() != typeof(Transform))
                     {
                         SerializedObject serializedObject = new SerializedObject(component);
                         SerializedProperty property = serializedObject.GetIterator();
